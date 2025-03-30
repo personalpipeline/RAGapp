@@ -1,0 +1,11 @@
+langchain_google.vertexai
+google-cloud-aiplatform
+langchain
+langchain-community
+gradio
+chromadb
+pypdf
+python-dotenv
+dotenv
+langchainhub
+langchain-google
