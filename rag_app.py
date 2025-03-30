@@ -2,6 +2,17 @@ import os
 import warnings
 from dotenv import load_dotenv
 
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+    print("Swapped standard sqlite3 with pysqlite3.")
+except ImportError:
+    print("pysqlite3 not found or import error, using standard sqlite3.")
+    # Depending on your requirements, you might want to raise an error here
+    # if pysqlite3 is strictly necessary for ChromaDB to function correctly.
+    pass
+
 # ### MODIFICATION ###: Import Google Vertex AI components
 from langchain_google_vertexai import VertexAI, VertexAIEmbeddings
 
@@ -139,7 +150,7 @@ with gr.Blocks() as rag_application:
     retriever_state = gr.State(None)
     status_display = gr.Textbox(label="Status", interactive=False)
     with gr.Row():
-        pdf_upload = gr.File(label="Upload only a PDF File", file_count="single", file_types=['.pdf'])
+        pdf_upload = gr.File(label="Upload only aPDF File", file_count="single", file_types=['.pdf'])
         process_btn = gr.Button("Process Document")
     query_input = gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
     submit_btn = gr.Button("Ask Question")
