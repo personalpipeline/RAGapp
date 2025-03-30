@@ -139,7 +139,7 @@ with gr.Blocks() as rag_application:
     retriever_state = gr.State(None)
     status_display = gr.Textbox(label="Status", interactive=False)
     with gr.Row():
-        pdf_upload = gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'])
+        pdf_upload = gr.File(label="Upload only a PDF File", file_count="single", file_types=['.pdf'])
         process_btn = gr.Button("Process Document")
     query_input = gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
     submit_btn = gr.Button("Ask Question")
