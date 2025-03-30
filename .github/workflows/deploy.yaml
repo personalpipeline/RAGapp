@@ -1,4 +1,4 @@
-name: Deploy RAG App to GCP VM
+name: Deploy RAG App to GCP VM (No Auto-Restart)
 
 # Trigger the workflow on push events to the specified branch
 on:
@@ -13,32 +13,29 @@ jobs:
 
     steps:
     # Step 1: Configure SSH Agent with Private Key
-    # This uses the SSH_PRIVATE_KEY secret you added to GitHub earlier
     - name: Configure SSH
       uses: webfactory/ssh-agent@v0.9.0 # Action to load SSH keys
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Use the secret
 
     # Step 2: Execute Deployment Commands on VM via SSH
-    - name: Deploy to VM
+    - name: Deploy Code and Dependencies to VM
       # Define environment variables for clarity (replace placeholders!)
       env:
-        SSH_USER: mailto_danielprince         # <<< REPLACE with your actual username on the VM (e.g., mailto_danielprince)
-        SSH_HOST: 34.100.227.2  # <<< REPLACE with your VM's actual External IP address
-        APP_DIR: /home/mailto_danielprince/app # <<< REPLACE 'your_vm_user' here too
-        GIT_BRANCH: main                # <<< Ensure this matches the branch in 'on:' above
-        SERVICE_NAME: rag-app.service   # The name of your systemd service
+        SSH_USER: mailto_danielprince    # <<< Use your actual username on the VM
+        SSH_HOST: 34.100.227.2           # <<< Use your VM's actual External IP address
+        APP_DIR: /home/mailto_danielprince/app # <<< Use correct user here too
+        GIT_BRANCH: main                 # <<< Ensure this matches the branch in 'on:' above
+        # SERVICE_NAME is removed as it's no longer used below
 
       run: |
         echo "Connecting to ${SSH_USER}@${SSH_HOST}..."
 
-        # SSH Options:
-        # -o StrictHostKeyChecking=accept-new : Automatically add new host keys (trust on first use within workflow)
-        # Consider using known_hosts for better security if feasible
+        # SSH Options
         ssh_opts="-o StrictHostKeyChecking=accept-new"
 
         # Commands to run on the remote server
-        # IMPORTANT: The 'sudo systemctl restart' requires passwordless sudo configuration on the VM (see next step)
+        # --- SERVICE RESTART COMMANDS REMOVED ---
         deploy_commands="cd ${APP_DIR} && \
                          echo 'Pulling latest code from branch ${GIT_BRANCH}...' && \
                          git checkout ${GIT_BRANCH} && \
@@ -49,9 +46,9 @@ jobs:
                          pip install -r requirements.txt && \
                          echo 'Deactivating virtual environment (post-install)...' && \
                          deactivate && \
-                        
+                         echo 'Code and dependencies updated. Manual service restart required.'"
 
         # Execute the commands via SSH
         ssh $ssh_opts ${SSH_USER}@${SSH_HOST} "${deploy_commands}"
 
-        echo "Deployment commands executed on VM."
+        echo "Deployment commands (excluding restart) executed on VM."
