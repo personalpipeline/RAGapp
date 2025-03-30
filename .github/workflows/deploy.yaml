@@ -49,9 +49,7 @@ jobs:
                          pip install -r requirements.txt && \
                          echo 'Deactivating virtual environment (post-install)...' && \
                          deactivate && \
-                         echo 'Attempting to restart application service (${SERVICE_NAME})...' && \
-                         sudo systemctl restart ${SERVICE_NAME} && \
-                         echo 'Service restart command issued successfully.'"
+                        
 
         # Execute the commands via SSH
         ssh $ssh_opts ${SSH_USER}@${SSH_HOST} "${deploy_commands}"
