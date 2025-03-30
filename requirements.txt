@@ -8,4 +8,4 @@ pypdf
 python-dotenv
 dotenv
 langchainhub
-
+pysqlite3-binary
