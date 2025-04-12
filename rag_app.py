@@ -146,7 +146,7 @@ def run_qa_chain(retriever_obj, query):
 
 # --- Gradio Interface Logic ---
 with gr.Blocks() as rag_application:
-    gr.Markdown("# RAG Application using Google Vertex AI\nUpload a PDF document,process it and ask questions.")
+    gr.Markdown("# RAG Application using Google Vertex AI\nUpload a PDF document,process it and ask questions. (Only PDF files supported)")
     retriever_state = gr.State(None)
     status_display = gr.Textbox(label="Status", interactive=False)
     with gr.Row():
