@@ -24,12 +24,11 @@ jobs:
         env:
           SSH_USER: mailto_danielprince    # <<< Use your actual username on the VM
           SSH_HOST: 34.100.170.54          # <<< Use your VM's actual External IP address
-          APP_DIR: /home/mailto_danielprince  # <<< Use correct user here too
+          APP_DIR: /home/mailto_danielprince/app  # <<< Use correct user here too
           GIT_BRANCH: main                # <<< Ensure this matches the branch in 'on:' above
           SERVICE_NAME:                   # <<< Name of the service to restart (if applicable)
-        run: |
+        run:
           echo "Connecting to ${SSH_USER}@${SSH_HOST}..."
-
           # SSH Options
           ssh_opts="-o StrictHostKeyChecking=accept-new"
 
