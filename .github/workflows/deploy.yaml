@@ -12,42 +12,53 @@ jobs:
     runs-on: ubuntu-latest # Use a standard GitHub Actions runner
 
     steps:
-    # Step 1: Configure SSH Agent with Private Key
-    - name: Configure SSH
-      uses: webfactory/ssh-agent@v0.9.0 # Action to load SSH keys
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Use the secret
+      # Step 1: Configure SSH Agent with Private Key
+      - name: Configure SSH
+        uses: webfactory/ssh-agent@v0.9.0 # Action to load SSH keys
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Use the secret
 
-    # Step 2: Execute Deployment Commands on VM via SSH
-    - name: Deploy Code and Dependencies to VM
-      # Define environment variables for clarity (replace placeholders!)
-      env:
-        SSH_USER: mailto_danielprince    # <<< Use your actual username on the VM
-        SSH_HOST: 34.100.170.54       # <<< Use your VM's actual External IP address
-        APP_DIR: /home/mailto_danielprince/app # <<< Use correct user here too
-        GIT_BRANCH: main                 # <<< Ensure this matches the branch in 'on:' above
-        SERVICE_NAME: rag_application # <<< Name of the service to restart (if applicable)
-      run: |
-        echo "Connecting to ${SSH_USER}@${SSH_HOST}..."
+      # Step 2: Execute Deployment Commands on VM via SSH
+      - name: Deploy Code and Dependencies to VM
+        # Define environment variables for clarity (replace placeholders!)
+        env:
+          SSH_USER: mailto_danielprince    # <<< Use your actual username on the VM
+          SSH_HOST: 34.100.170.54          # <<< Use your VM's actual External IP address
+          APP_DIR: /home/mailto_danielprince  # <<< Use correct user here too
+          GIT_BRANCH: main                # <<< Ensure this matches the branch in 'on:' above
+          SERVICE_NAME:                   # <<< Name of the service to restart (if applicable)
+        run: |
+          echo "Connecting to ${SSH_USER}@${SSH_HOST}..."
 
-        # SSH Options
-        ssh_opts="-o StrictHostKeyChecking=accept-new"
+          # SSH Options
+          ssh_opts="-o StrictHostKeyChecking=accept-new"
 
-        # Commands to run on the remote server
-        # --- SERVICE RESTART COMMANDS REMOVED ---
-        deploy_commands="cd ${APP_DIR} && \
-                         echo 'Pulling latest code from branch ${GIT_BRANCH}...' && \
-                         git checkout ${GIT_BRANCH} && \
-                         git pull origin ${GIT_BRANCH} && \
-                         echo 'Activating virtual environment...' && \
-                         source venv/bin/activate && \
-                         echo 'Installing/updating dependencies...' && \
-                         pip install -r requirements.txt && \
-                         echo 'Deactivating virtual environment (post-install)...' && \
-                         deactivate && \
-                         echo 'Code and dependencies updated. Manual service restart required.'"
+          # Commands to run on the remote server
+          # --- SERVICE RESTART COMMANDS REMOVED ---
+          deploy_commands="cd ${APP_DIR} && \
+                           echo 'Pulling latest code from branch ${GIT_BRANCH}...' && \
+                           git checkout ${GIT_BRANCH} && \
+                           git pull origin ${GIT_BRANCH} && \
+                           echo 'Activating virtual environment...' && \
+                           source venv/bin/activate && \
+                           echo 'Installing/updating dependencies...' && \
+                           pip install -r requirements.txt && \
+                           echo 'Deactivating virtual environment (post-install)...' && \
+                           deactivate && \
+                           echo 'Code and dependencies updated. Manual service restart required.'"
 
-        # Execute the commands via SSH
-        ssh $ssh_opts ${SSH_USER}@${SSH_HOST} "${deploy_commands}"
+          # Execute the commands via SSH
+          ssh $ssh_opts ${SSH_USER}@${SSH_HOST} "${deploy_commands}"
 
-        echo "Deployment commands (excluding restart) executed on VM."
+          echo "Deployment commands (excluding restart) executed on VM."
+
+      - name: Post job cleanup.
+        run: echo "The file argument must be of type string. Received undefined"
+
+      - name: Stopping SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          exit-ssh-agent: true
+
+      - name: Complete job
+        run: echo "Complete job"
