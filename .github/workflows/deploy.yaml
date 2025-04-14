@@ -26,8 +26,7 @@ jobs:
         SSH_HOST: 34.93.158.204        # <<< Use your VM's actual External IP address
         APP_DIR: /home/mailto_danielprince/app # <<< Use correct user here too
         GIT_BRANCH: main                 # <<< Ensure this matches the branch in 'on:' above
-        # SERVICE_NAME is removed as it's no longer used below
-
+        SERVICE_NAME: rag_application # <<< Name of the service to restart (if applicable)
       run: |
         echo "Connecting to ${SSH_USER}@${SSH_HOST}..."
 
