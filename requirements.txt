@@ -1,11 +1,8 @@
-langchain_google.vertexai
-google-cloud-aiplatform
-langchain
-langchain-community
-gradio
+langchain-google-vertexai==2.0.20
+google-cloud-aiplatform==1.88.0
+langchain==0.3.23
+langchain-community==0.3.21
 chromadb
 pypdf
+gradio
 python-dotenv
-dotenv
-langchainhub
-pysqlite3-binary

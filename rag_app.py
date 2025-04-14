@@ -27,7 +27,6 @@ warnings.filterwarnings('ignore')
 
 # ### MODIFICATION ###: Load environment variables
 load_dotenv()
-
 # ### MODIFICATION ###: Get Google Cloud Project ID from environment
 google_cloud_project = os.getenv("GOOGLE_CLOUD_PROJECT")
 if not google_cloud_project:
