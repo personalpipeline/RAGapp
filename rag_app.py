@@ -159,4 +159,4 @@ with gr.Blocks() as rag_application:
 
 # --- Launch Gradio ---
 print("Launching Gradio Interface...")
-rag_application.launch(server_name="0.0.0.0", server_port=7860)
+rag_application.launch(share=True, server_port=7860)
